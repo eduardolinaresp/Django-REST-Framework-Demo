@@ -142,12 +142,12 @@ Ejemplo Django REST Framework
 
 ### Crear archivo urls.py en apiBasic
 
-    from django.urls import path
-    from .views import article_list
+        from django.urls import path
+        from .views import article_list
 
-    urlpatterns = [
-        path('article/',  article_list),
-    ]
+        urlpatterns = [
+            path('article/',  article_list),
+        ]
 
 ### Comprobar nueva ruta
 
@@ -278,6 +278,7 @@ Ejemplo Django REST Framework
             #path('article/',  article_list),
             path('article/',  ArticleAPIView.as_view()),
             path('detail/<int:pk>/',  article_detail),
+        ]
     
 ]   4- comprobar en http://127.0.0.1:8000/article/
     
@@ -330,3 +331,52 @@ Ejemplo Django REST Framework
         ]
 
 ## Generic Views and mixims
+
+    En apiBasic
+    
+    1- Importar Librerias en archivo apiBasic.views 
+
+        from rest_framework import generics
+        from rest_framework import mixins
+
+    2- Definir clase GenericAPIView
+
+        class GenericAPIView(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin,
+                            mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+            serializer_class =   ArticleSerializerser
+            queryset = Article.objects.all()
+            
+            lookup_field = 'id'
+            
+            def get(self, request, id =None):
+                if id:
+                    return self.retrive(request)
+                else:    
+                    return self.list(request)
+            
+            def post(self, request):
+                return self.create(request)
+            
+            def put(self, request, id=None):
+                return self.update(request, id)
+            
+            def delete(self,request):
+                return self.destroy(request,id)
+
+    3- Importar y Definir ruta en archivo apiBasic.urls
+
+        from .views import article_list , article_detail, ArticleAPIView, ArticleDetails, GenericAPIView
+
+        urlpatterns = [
+            #path('article/',  article_list),
+            path('article/',  ArticleAPIView.as_view()),
+            #path('detail/<int:pk>/',  article_detail),
+            path('detail/',  ArticleDetails.as_view()),
+            path('generic/article/<int:id>/',  GenericAPIView.as_view()),
+            
+        ]
+
+## Authentications
+
+
+
