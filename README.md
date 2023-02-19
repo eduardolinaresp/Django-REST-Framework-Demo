@@ -176,5 +176,76 @@ Ejemplo Django REST Framework
 ### Comprobar nueva ruta
     http://127.0.0.1:8000/detail/2/
 
+## Agregar tag al avance 
+
+    git tag -a Sin-decoradores-en-vistas 2c473a6 
+    git push origin --tags
+
+## Establecer en archivo de proyecto librerias utilizadas.
+
+    pip freeze > requirements.txt 
+
 
 ## Function Api Views decorators   
+
+    1- Importar dependencias 
+
+        from rest_framework.decorators import api_view
+        from rest_framework.response import Response
+        from rest_framework  import status
+    
+    2- Agregar decoradores
+
+        @api_view(['GET','POST'])
+
+    3- Simplificar codigo
+
+        def article_list(request, format=None):
+        if request.method == 'GET':
+            articles = Article.objects.all()
+            serializer = ArticleSerializerser(articles, many=True)
+            return Response(serializer.data)      
+        elif request.method == 'POST':       
+        serializer = ArticleSerializerser(data=request.data)
+        if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        @api_view(['GET','PUT','DELETE'])
+        def article_detail(request, pk): 
+            try:
+            article = Article.objects.get(pk=pk)
+            except Article.DoesNotExist:
+                return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+            if request.method == 'GET':
+                serializer = ArticleSerializerser(article) 
+                return Response(serializer.data)
+            elif request.method == 'PUT':       
+                serializer = ArticleSerializerser(article, data=request.data)
+                if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            elif request.method == 'DELETE':
+                article.delete()
+                return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+    
+    4- resultado
+    
+       se incorpora un proto swagger para manipular los metodos http
+
+    5-comprobacion 
+        http://127.0.0.1:8000/article/
+        http://127.0.0.1:8000/detail/1/
+
+## Si se agrega nuevo campo al modelo 
+        
+        Modificar clase Model serializer por esto asi se obtiene todos los campos 
+
+        #fields = ['id','title', 'author', 'email']
+        fields = '__all__'
+
+## Class based api views
+
+
