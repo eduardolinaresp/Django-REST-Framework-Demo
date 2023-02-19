@@ -248,4 +248,85 @@ Ejemplo Django REST Framework
 
 ## Class based api views
 
+### Modificar en apiBasic.views
+    
+    En apiBasic
+    
+    1- Importar Librerias en archivo apiBasic.views 
 
+      from rest_framework.views import APIView
+
+    2- Definir clase ArticleAPIview en archivo apiBasic.views  
+
+        class ArticleAPIView(APIView):
+        def get(self, request):
+            articles = Article.objects.all()
+            serializer = ArticleSerializerser(articles, many=True)
+            return Response(serializer.data)
+        def post(self, request):
+            serializer = ArticleSerializerser(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+    3- Importar y Definir ruta en archivo apiBasic.urls
+
+        from .views import article_list , article_detail, ArticleAPIView
+
+        urlpatterns = [
+            #path('article/',  article_list),
+            path('article/',  ArticleAPIView.as_view()),
+            path('detail/<int:pk>/',  article_detail),
+    
+]   4- comprobar en http://127.0.0.1:8000/article/
+    
+      Enviar cuerpo
+
+       {            
+            "title": "Titulo3",
+            "author": "ELINARES",
+            "email": "elinares@email.com",
+            "date": "2023-02-19"
+        }
+    5- resultado OK
+
+    6- Para el resto de operaciones http 
+        
+        definir clase ArticleDetails
+
+        class ArticleDetails(APIView):
+        def get_object(self, id):
+            try:
+            return Article.objects.get(id=id)
+            except Article.DoesNotExist:
+                return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+            
+        def get(self, request, id):
+            article = self.get_object(id)
+            serializer = ArticleSerializerser(article) 
+            return Response(serializer.data)
+        def put(self, request, id):
+            serializer = ArticleSerializerser(article, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        def delete(self, request, id):
+            article = self.get_object(id)
+            article.delete()
+            return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+  6- Importar y Definir ruta en archivo apiBasic.urls
+
+        from .views import article_list , article_detail, ArticleAPIView, ArticleDetails
+
+        urlpatterns = [
+            #path('article/',  article_list),
+            path('article/',  ArticleAPIView.as_view()),
+            #path('detail/<int:pk>/',  article_detail),
+            path('detail/',  ArticleDetails.as_view()),
+            
+        ]
+
+## Generic Views and mixims
