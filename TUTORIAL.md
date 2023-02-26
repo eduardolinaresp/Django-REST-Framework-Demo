@@ -549,4 +549,34 @@
 
 ## Generic ViewSet 
 
-    
+    Se comenta clase class ArticleViewSet     
+    se crea nueva definicion 
+        class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin)
+    se comprueba url  
+        http://127.0.0.1:8000/viewset/article/      
+        NOTA: Es ok aparece get
+    se agrega mixins.CreateModelMixin
+        class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin)
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/
+        NOTA: Es ok aparece post                
+    se agrega mixins.UpdateModelMixin
+        class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin   ): 
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/1/ 
+        NOTA: Es ok aparece put
+    se agrega mixins.RetrieveModelMixin
+        class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,mixins.RetrieveModelMixin  ):  
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/1/ 
+        NOTA: Es ok aparece put  y se cargan valores previos 
+    se agrega mixins.DestroyModelMixin.
+        class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin , mixins.RetrieveModelMixin ,mixins.DestroyModelMixin ):
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/1/ 
+        NOTA: Es ok aparece boton delete  y se cargan valores previos   
+
+## Modal ViewSets
