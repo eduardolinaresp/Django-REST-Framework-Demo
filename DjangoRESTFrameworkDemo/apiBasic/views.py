@@ -17,10 +17,16 @@ from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
-class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,
-                     mixins.UpdateModelMixin , mixins.RetrieveModelMixin ,mixins.DestroyModelMixin ): # Example REST Framework Generic Viewsets 
+
+class ArticleViewSet(viewsets.ModelViewSet ): # Example REST Framework Modal ViewSets
       serializer_class =   ArticleSerializerser
       queryset = Article.objects.all()
+
+
+#class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,
+#                     mixins.UpdateModelMixin , mixins.RetrieveModelMixin ,mixins.DestroyModelMixin ): # Example REST Framework Generic Viewsets 
+#      serializer_class =   ArticleSerializerser
+#      queryset = Article.objects.all()
 
 
 #class ArticleViewSet(viewsets.ViewSet):

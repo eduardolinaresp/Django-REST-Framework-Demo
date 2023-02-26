@@ -580,3 +580,18 @@
         NOTA: Es ok aparece boton delete  y se cargan valores previos   
 
 ## Modal ViewSets
+
+    se comenta implementacion ArticleViewSet
+    se crea nueva implementacion para ArticleViewSet
+
+        class ArticleViewSet(viewsets.ModelViewSet ): # Example REST Framework Modal ViewSets
+                serializer_class =   ArticleSerializerser
+                queryset = Article.objects.all()
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/
+        NOTA: Es ok aparece post y el listado previo de articulos
+    se comprueba url 
+        http://127.0.0.1:8000/viewset/article/1/ 
+        NOTA: Es ok aparece boton delete, put  y se cargan valores previos   
+
+## FIN
